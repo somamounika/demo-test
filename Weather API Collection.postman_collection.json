@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "b97da878-15c1-43a7-85ef-75c8191918ea",
+		"name": "Weather API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43191907"
+	},
+	"item": [
+		{
+			"name": "Get Weather API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response",
+							"let jsonData = pm.response.json();",
+							"",
+							"// Check for successful response",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if response contains required fields",
+							"pm.test(\"Response has temp_min, temp_max, and humidity\", function () {",
+							"    pm.expect(jsonData.main).to.have.property(\"temp_min\");",
+							"    pm.expect(jsonData.main).to.have.property(\"temp_max\");",
+							"    pm.expect(jsonData.main).to.have.property(\"humidity\");",
+							"});",
+							"",
+							"// Validate temperature range (-50°C to 60°C)",
+							"pm.test(\"Temperature values are realistic\", function () {",
+							"    pm.expect(jsonData.main.temp_max).to.be.within(-50, 60);",
+							"    pm.expect(jsonData.main.temp_min).to.be.within(-50, 60);",
+							"});",
+							"",
+							"// Validate humidity range (0% to 100%)",
+							"pm.test(\"Humidity is in valid range\", function () {",
+							"    pm.expect(jsonData.main.humidity).to.be.within(0, 100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openweathermap.org/data/2.5/weather?q=Singapore&appid=67c9e155817d2c9eefb8765f998f207a",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Singapore"
+						},
+						{
+							"key": "appid",
+							"value": "67c9e155817d2c9eefb8765f998f207a"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
